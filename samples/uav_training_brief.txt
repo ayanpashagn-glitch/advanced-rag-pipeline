@@ -1,0 +1,13 @@
+UAV Training Brief - Synthetic Educational Example
+
+Purpose and applications
+This fictional document describes non-operational training UAVs. The major applications are terrain mapping, disaster assessment, and agricultural observation. The system is intended for classroom demonstrations using public or self-created data.
+
+Capabilities
+The training platform has a nominal battery endurance of 45 minutes in the example scenario. It uses a visible-light camera for mapping. The example provides no claims about real aircraft, weapon systems, range, payload capacity, or deployment readiness.
+
+Limitations
+Strong winds reduce image quality. Low light reduces the usefulness of the visible-light camera. Battery endurance varies with weather and usage. Human review is required before interpreting the mapping outputs.
+
+Data and evaluation
+All example numbers are invented for software testing. No personal data is collected. Evaluation should check source citations, unsupported-question refusal, and consistent answers. This text is not an ASTRA-provided starter resource or an authoritative defence report.

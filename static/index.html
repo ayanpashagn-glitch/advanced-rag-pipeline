@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ASTRA INTEL · Document Intelligence</title>
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/" aria-label="ASTRA INTEL home"
+        ><span class="brandmark">A<span>✦</span></span
+        ><span>ASTRA <b>INTEL</b><small>DOCUMENT INTELLIGENCE</small></span></a
+      >
+      <div class="header-right">
+        <span class="pill">SOFTWARE & AI / ML</span
+        ><span class="build">BUILD CHALLENGE · 2026–27</span>
+      </div>
+    </header>
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="section-heading">
+          <h2>Workspace</h2>
+          <span id="doc-count">0 / 12</span>
+        </div>
+        <form id="upload-form">
+          <label class="dropzone" id="dropzone" for="file"
+            ><span class="upload-icon">↥</span
+            ><strong>Add your documents</strong
+            ><span>Drop files here or choose files</span
+            ><small>PDF, TXT, MD · up to 20 MB each</small
+            ><input
+              id="file"
+              type="file"
+              accept=".pdf,.txt,.md"
+              multiple /></label
+          ><label class="check"
+            ><input id="ocr" type="checkbox" /> OCR scanned pages
+            <span id="ocr-state"></span></label
+          ><button id="upload" type="submit" class="primary full">
+            Upload & index
+          </button>
+        </form>
+        <p class="micro">
+          Use public or self-created documents. Select which sources the
+          assistant can read.
+        </p>
+        <div id="documents" class="documents">
+          <p class="empty-small">No documents yet.</p>
+        </div>
+        <div class="section-heading history-heading">
+          <h2>Investigations</h2>
+          <button
+            id="new-chat"
+            class="icon-button"
+            title="New conversation"
+            aria-label="New conversation"
+          >
+            +
+          </button>
+        </div>
+        <div id="conversations"></div>
+        <div class="system-card">
+          <span class="eyebrow">MODEL CONFIGURATION</span
+          ><strong id="model">Loading…</strong>
+          <p id="status-note"></p>
+          <details>
+            <summary>Setup & privacy</summary>
+            <p id="privacy"></p>
+            <p>
+              Configure .env, start Ollama, then restart this app. API keys stay
+              on the server. This is a local single-user workspace.
+            </p>
+          </details>
+        </div>
+      </aside>
+      <main>
+        <section class="intro">
+          <div>
+            <span class="eyebrow">FROM DOCUMENTS TO UNDERSTANDING</span>
+            <h1>Ask. Trace. Understand.</h1>
+            <p>
+              Explore your documents with answers you can trace to the page.
+            </p>
+          </div>
+          <span class="scope-indicator"><i></i> DOCUMENT-ONLY</span>
+        </section>
+        <div id="notice" role="status" aria-live="polite" hidden></div>
+        <div class="toolbar">
+          <div class="tabs" role="group" aria-label="Research mode">
+            <button class="active" data-mode="ask">Ask documents</button
+            ><button data-mode="search">Search evidence</button
+            ><button data-mode="compare">Compare two</button>
+          </div>
+          <button id="summarize" class="secondary">✧ Summarize selected</button>
+        </div>
+        <div class="scope-row">
+          <span id="scope">No sources selected</span
+          ><span id="activity" role="status" aria-live="polite"></span>
+        </div>
+        <section id="messages" aria-label="Conversation" aria-live="polite">
+          <div class="welcome">
+            <div class="reticle">✦</div>
+            <span class="eyebrow">YOUR NEXT INSIGHT STARTS HERE</span>
+            <h2>Give your questions a source.</h2>
+            <p>
+              Upload a report, select it, and ask a question.<br />Every
+              supported answer includes the evidence behind it.
+            </p>
+            <div class="suggestions">
+              <button
+                data-question="What are the major applications discussed in this document?"
+              >
+                What are the major applications? <span>↗</span></button
+              ><button
+                data-question="What limitations are described in this document?"
+              >
+                What limitations are described? <span>↗</span>
+              </button>
+            </div>
+            <p class="micro">
+              No web search. No outside sources. Unsupported questions receive
+              an explicit response.
+            </p>
+          </div>
+        </section>
+        <form id="question-form" class="composer">
+          <label class="sr-only" for="question">Your question</label
+          ><textarea
+            id="question"
+            rows="2"
+            maxlength="2000"
+            placeholder="Ask a question about your selected documents…"
+          ></textarea
+          ><button class="primary" id="send" type="submit">
+            Ask <span>↗</span>
+          </button>
+        </form>
+        <p class="composer-note">
+          AI can misinterpret evidence. Open citations to check the original
+          text. Enter to send · Shift + Enter for a new line.
+        </p>
+      </main>
+    </div>
+    <dialog id="source-dialog">
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">SOURCE EVIDENCE</span>
+          <h2 id="source-title"></h2>
+        </div>
+        <button id="close-source" class="icon-button" aria-label="Close source">
+          ×
+        </button>
+      </div>
+      <p class="micro">
+        Highlighted passage in extracted page text. Page numbers refer to PDF
+        file order, not printed page labels. OCR text may contain recognition
+        errors.
+      </p>
+      <pre id="source-text"></pre>
+    </dialog>
+    <footer>
+      ASTRA · BMS Institute of Technology & Management
+      <span>Built by Ayan Pasha G.N · Evolved from Advanced RAG</span>
+    </footer>
+  </body>
+</html>

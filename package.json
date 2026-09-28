@@ -1,0 +1,7 @@
+{
+  "name": "astra-intel-browser-tests",
+  "private": true,
+  "description": "Optional browser QA only. Node is not needed to run ASTRA INTEL.",
+  "scripts": {"test:browser": "node tests/browser_smoke.cjs"},
+  "devDependencies": {"playwright": "1.62.1"}
+}

@@ -1,0 +1,13 @@
+UAV Training Update - Synthetic Educational Example
+
+Purpose and applications
+This fictional revised training platform supports terrain mapping, disaster assessment, and agricultural observation. It is designed for classroom use with public or self-created data.
+
+Capabilities
+The revised example has a nominal battery endurance of 60 minutes. A visible-light camera is retained. An improved image-stabilization module is included in this fictional update. The document does not specify operational range or payload capacity.
+
+Limitations
+Low light remains a limitation. Strong winds can still degrade image quality. Human review of outputs remains required. The documents do not provide enough information to establish real-world superiority or safety.
+
+Data provenance
+All example numbers are invented for software tests. This is not an ASTRA starter resource or an authoritative defence report.
