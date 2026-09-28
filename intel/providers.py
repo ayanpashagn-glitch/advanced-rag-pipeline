@@ -57,7 +57,7 @@ class AI:
             data = self._post(self.s.ollama_url.rstrip('/') + '/api/chat',
                               {'model': self.s.chat_model, 'messages': messages, 'format': 'json', 'stream': False,
                                'keep_alive': '30m',
-                               'options': {'temperature': 0, 'seed': 42, 'num_ctx': 8192, 'num_predict': 1200}})
+                               'options': {'temperature': 0, 'seed': 42, 'num_ctx': 6144, 'num_predict': 900}})
             text = data.get('message', {}).get('content', '')
         else:
             raise ProviderError('AI_PROVIDER must be ollama, groq or evidence.')
