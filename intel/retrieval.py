@@ -26,7 +26,9 @@ def rank(chunks, question, vectors=None, query_vector=None, limit=8):
         index.add(matrix)
         scores, indices = index.search(query, len(chunks))
         cosine = {int(i): float(s) for i, s in zip(indices[0], scores[0])}
-        values = [0.85 * cosine[i] + 0.15 * lexical[i] for i in range(len(chunks))]
+        # Hybrid retrieval gives exact requirement/heading terms meaningful weight while
+        # retaining semantic recall for paraphrased questions.
+        values = [0.70 * cosine[i] + 0.30 * lexical[i] for i in range(len(chunks))]
     else:
         values = lexical
     ordering = sorted(range(len(chunks)), key=lambda i: (-values[i], chunks[i]['id']))[:limit]
