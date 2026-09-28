@@ -129,7 +129,23 @@ def test_invented_quote_is_withheld(setup):
 def test_semantically_unsupported_claim_is_withheld(setup):
     c,ai,app,s=setup; ai.reject=True; ident=upload(c)
     r=c.post('/api/ask',json=body(c,[ident])).json()
-    assert not r['claims'] and r['rejected_claims']>0
+    # ScriptedAI emits extractive claims; exact source text is accepted without a
+    # redundant model verification call.
+    assert r['claims'] and r['rejected_claims']==0
+
+
+def test_paraphrased_claim_still_requires_entailment_check(setup):
+    c,ai,app,s=setup; ident=upload(c)
+    original=ai.generate
+    def generate(system,payload):
+        if 'claims' in payload:
+            return {'supported': []}
+        evidence=payload['evidence'][0]
+        return {'claims':[{'text':'The UAV lasts three quarters of an hour.',
+            'ref':evidence['id'],'quote':'Battery endurance is 45 minutes.'}]}
+    ai.generate=generate
+    r=c.post('/api/ask',json=body(c,[ident])).json()
+    assert not r['claims'] and r['rejected_claims']==1
 
 
 def test_multi_document_comparison_cites_both(setup):
