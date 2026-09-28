@@ -31,7 +31,7 @@ class AI:
         result = []
         for start in range(0, len(texts), 16):
             data = self._post(self.s.ollama_url.rstrip('/') + '/api/embed',
-                              {'model': self.s.embedding_model, 'input': texts[start:start+16], 'truncate': False})
+                              {'model': self.s.embedding_model, 'input': texts[start:start+16], 'truncate': False, 'keep_alive': '30m'})
             vectors = data.get('embeddings', [])
             if len(vectors) != len(texts[start:start+16]):
                 raise ProviderError('Embedding service returned an incomplete batch.')
@@ -56,7 +56,8 @@ class AI:
         elif self.s.provider == 'ollama':
             data = self._post(self.s.ollama_url.rstrip('/') + '/api/chat',
                               {'model': self.s.chat_model, 'messages': messages, 'format': 'json', 'stream': False,
-                               'options': {'temperature': 0, 'seed': 42, 'num_ctx': 16384, 'num_predict': 2500}})
+                               'keep_alive': '30m',
+                               'options': {'temperature': 0, 'seed': 42, 'num_ctx': 8192, 'num_predict': 1200}})
             text = data.get('message', {}).get('content', '')
         else:
             raise ProviderError('AI_PROVIDER must be ollama, groq or evidence.')
