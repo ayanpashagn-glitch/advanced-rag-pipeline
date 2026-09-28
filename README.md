@@ -4,8 +4,6 @@
 
 Upload a public document, generate a concise summary, ask questions, and trace each accepted claim to its document and page. Built by Ayan Pasha G.N with disclosed ChatGPT assistance, evolving his existing **Advanced RAG** project.
 
-> Local single-user build challenge application. This is not an operational defence intelligence system. Read [requirements](docs/REQUIREMENTS.md) and [test evidence](docs/TESTING.md) before calling it submission-ready. A real-model preflight and the candidate's recorded video are required.
-
 ## Features
 
 - PDF, TXT and Markdown upload; page-aware extraction and recursive chunking.
@@ -23,9 +21,7 @@ Upload a public document, generate a concise summary, ask questions, and trace e
 
 Python 3.12, FastAPI, vanilla HTML/CSS/JavaScript, SQLite, pypdf, LangChain recursive text splitter, NumPy, FAISS, Ollama, optional Groq, PDFium and Tesseract.
 
-The original app at base commit `74cb126594eea9d28788dc0260255cc1b9ae117d` used Streamlit, LangChain, Ollama embeddings, FAISS, Groq and a web fallback. The original source and requirements remain under `legacy/` for provenance; they are not used at runtime.
-
-This version reuses the recursive splitting configuration (1000 characters, 200 overlap), Ollama embedding/FAISS retrieval approach and retrieve-then-generate design. It replaces website ingestion with page-aware uploads, removes external web answering, and separates UI, API, storage and AI processing. Provider calls use HTTP directly to reduce wrapper dependencies. The interface and persistence layer are new.
+This challenge branch reuses the original project's recursive splitting configuration, Ollama embedding/FAISS retrieval approach and retrieve-then-generate design. It replaces website ingestion with page-aware uploads, removes external web answering, and separates UI, API, storage and AI processing.
 
 ## Quick start - Windows PowerShell
 
@@ -81,28 +77,6 @@ Install Tesseract with English language data and ensure `tesseract --version` wo
 
 OCR runs on pages with fewer than 30 extracted characters. Mixed pages with both substantial digital text and important image-only text are a known limitation. Highlighting uses extracted text, not original PDF coordinates.
 
-## Architecture
-
-```mermaid
-flowchart TD
-    U["Browser: upload, ask, compare"] --> A["FastAPI: validate and scope"]
-    A --> P["PDF extraction / optional OCR"]
-    P --> C["Page-aware recursive chunks"]
-    C --> E["Ollama embeddings"]
-    C --> D["SQLite: sources and conversations"]
-    E --> D
-    A --> R["FAISS retrieval from selected sources"]
-    D --> R
-    R --> L["Ollama or Groq generation"]
-    L --> V["Quote check and entailment check"]
-    V --> D
-    V --> U
-```
-
-[Open the presentation diagram](docs/architecture.svg).
-
-Summary requests process all chunks in batches, reduce exact quoted evidence and then generate and verify a concise final summary. Q&A retrieves relevant chunks instead of sending the full document. FAISS indexes are reconstructed from stored vectors for this small workspace; no unsafe pickle index loading is used.
-
 ## Using the app
 
 1. Upload `samples/uav_training_brief.txt` and `samples/uav_training_update.txt` or ASTRA's actual starter PDFs.
@@ -125,11 +99,7 @@ The included examples are fictional, self-created test data, not authoritative d
 .\.venv\Scripts\python.exe live_preflight.py
 ```
 
-For Linux/macOS substitute `.venv/bin/python`. The exact Linux environment used for verification is recorded in `requirements-lock.txt`; install it instead of the flexible requirements files when reproducing that environment. See [TESTING.md](docs/TESTING.md) for observed results, provider test boundaries and manual failure checks. `live_preflight.py` uploads self-created examples, tests the running AI pipeline, writes a local JSON report under `artifacts/`, and deletes its uploaded examples afterwards. Run it in an otherwise empty temporary demo workspace.
-
-## AI disclosure
-
-See [AI_USAGE.md](docs/AI_USAGE.md). ChatGPT assisted with the implementation, tests, UI and documentation in this challenge branch. The candidate must accurately describe their own modifications, decisions, tests and understanding. Do not claim to have manually written AI-generated portions.
+For Linux/macOS substitute `.venv/bin/python`. The exact Linux environment used for verification is recorded in `requirements-lock.txt`; install it instead of the flexible requirements files when reproducing that environment. `live_preflight.py` uploads self-created examples, tests the running AI pipeline, writes a local JSON report under `artifacts/`, and deletes its uploaded examples afterwards. Run it in an otherwise empty temporary demo workspace.
 
 ## Limits and future improvements
 
@@ -145,20 +115,9 @@ See [AI_USAGE.md](docs/AI_USAGE.md). ChatGPT assisted with the implementation, t
 - Deleted source documents invalidate future queries but old conversation excerpts remain in SQLite. Delete the local data directory to reset the whole workspace after stopping the server.
 - Next improvements: retrieval evaluation on official starter PDFs, reranking, better table parsing, multilingual OCR, background jobs, robust query rewriting, export and authenticated deployment.
 
-## Submission materials
-
-- [Full PDF requirement map](docs/REQUIREMENTS.md)
-- [Explanation guide and interview questions](docs/EXPLANATION_GUIDE.md)
-- [5-8 minute video script](docs/VIDEO_SCRIPT.md)
-- [AI usage disclosure](docs/AI_USAGE.md)
-- [Test report and preflight](docs/TESTING.md)
-
-Record your own working demo and complete ASTRA's submission form by **1 October 2026** (confirm exact time with the organizers). The video and form submission cannot be replaced by generated documentation.
-
 ## Sources / attribution
 
 - Original project: https://github.com/ayanpashagn-glitch/advanced-rag-pipeline
-- Challenge brief: candidate-provided `Astra_Software_interview.pdf`; organizer material is not republished here.
 - Ollama API: https://docs.ollama.com/api and https://github.com/ollama/ollama/blob/main/docs/api.md
 - Groq API: https://console.groq.com/docs/api-reference
 - LangChain text splitters: https://docs.langchain.com/oss/python/integrations/splitters
