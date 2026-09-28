@@ -60,12 +60,19 @@ class Intelligence:
                     self.store.set_vectors(doc['id'], vectors, self.s.embedding_model)
                     doc['vectors'] = vectors
             vector = self.ai.embed([question])[0]
-        groups = [[d] for d in docs] if compare else [docs]
+        # For multi-document questions, retrieve independently from each source so a
+        # long PDF cannot crowd shorter documents out of the evidence window.
+        per_document = compare or len(docs) > 1
+        groups = [[d] for d in docs] if per_document else [docs]
         result = []
         for group in groups:
             cs = self.chunks(group)
             vectors = [v for d in group for v in d['vectors']] if mode == 'semantic' else None
-            result.extend(rank(cs, question, vectors, vector, limit=5 if compare else 10))
+            limit = 5 if compare else (4 if len(docs) > 1 else 10)
+            result.extend(rank(cs, question, vectors, vector, limit=limit))
+        # Keep deterministic score order while preserving cross-document coverage.
+        if len(docs) > 1:
+            result.sort(key=lambda c: (-c['score'], c['id']))
         return result, mode
 
     def ground(self, response, evidence, verify=True):
