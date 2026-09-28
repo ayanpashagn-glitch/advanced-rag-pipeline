@@ -148,6 +148,17 @@ def test_paraphrased_claim_still_requires_entailment_check(setup):
     assert not r['claims'] and r['rejected_claims']==1
 
 
+def test_multi_document_retrieval_preserves_each_source(setup):
+    c,ai,app,s=setup
+    a=upload(c,TEXT,'uav.txt')
+    b=upload(c,OTHER,'ew.txt')
+    d=upload(c,'Autonomous ground vehicles support explosive ordnance disposal and surveillance.','ugv.txt')
+    docs=app.state.service.select([a,b,d])
+    results,mode=app.state.service.retrieve(docs,'autonomous surveillance battery')
+    assert mode=='semantic'
+    assert {x['document_id'] for x in results}=={a,b,d}
+
+
 def test_multi_document_comparison_cites_both(setup):
     c,ai,app,s=setup; a=upload(c); b=upload(c,OTHER,'second.txt')
     r=c.post('/api/ask',json=body(c,[a,b],compare=True)).json()
