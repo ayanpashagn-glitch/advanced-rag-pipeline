@@ -1,8 +1,0 @@
-﻿streamlit
-python-dotenv
-langchain-community
-langchain-core
-langchain-groq
-langchain-ollama
-langchain-text-splitters
-faiss-cpu
